@@ -1,0 +1,430 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <script src="   https://cdn.bootcdn.net/ajax/libs/jquery/3.6.1/jquery.js"></script> 
+    <link rel="stylesheet" href="./css/bootstrap.min.css"> 
+    <script src="./js/bootstrap.js"></script> 
+    <style> 
+        .tit { 
+            text-align: center; 
+        } 
+    </style> 
+    <script> 
+        $(function () { 
+            $('.add-btn').click(function () { 
+                // alert(11122)
+                $('#addModal').modal({ 
+                    backdrop: 'static' 
+                }) 
+            }); 
+            $(".add-modal-save").click(function () { 
+                var IDid = parseInt(Math.random() * 8999) + 1000; 
+                var Name = $("#addModal form input[name=addName]").val(); 
+                var gender = $("#addModal form input[name=gender]:checked").val() == 'M' ? '男' : '女'; 
+                var email = $("#addModal form input[name=addEmail]").val(); 
+                var Dept = $("#addModal form select option:selected").val();  
+                switch (Dept) { 
+                    case 'kf': 
+                        Dept = "开发部"; 
+                        break; 
+                    case 'xz': 
+                        Dept = "行政部"; 
+                        break; 
+                    case 'js': 
+                        Dept = "技术部"; 
+                        break; 
+                    case 'sc': 
+                        Dept = "市场部"; 
+                        break; 
+                    case 'cs': 
+                        Dept = "测试部"; 
+                        break; 
+                } 
+                var ckTd = $("<td><input type='checkbox' name='checkitem'> </td>"); 
+                var idTd = $(" <td></td>").append(IDid); 
+                var usernameTd = $(" <td></td>").append(Name); 
+                var genderTd = $(" <td></td>").append(gender); 
+                var emailTd = $(" <td></td>").append(email); 
+                var deptTd = $(" <td></td>").append(Dept); 
+                var editBtn = $('<button type="button" class="btn btn-primary btn-sm edit-btn"> <span class="glyphicon glyphicon-pencil"></span> 修改</button>'); 
+                var delBtn = $('<button type="button" class="btn btn-danger btn-sm del-btn"> <span class="glyphicon glyphicon-trash"></span> 删除</button>');  
+                var btnTd = $('<td></td>').append(editBtn).append(" ").append(delBtn); 
+                var tr = $("<tr></tr>") 
+                    .append(ckTd) 
+                    .append(idTd) 
+                    .append(NameTd) 
+                    .append(genderTd) 
+                    .append(emailTd) 
+                    .append(deptTd) 
+                    .append(btnTd) 
+                    .appendTo("tbody");  
+                $("#addModal").modal('hide'); 
+            }); 
+            $(document).on("click", ".del-btn", function () { 
+                $(this).parent().parent().remove(); 
+            }); 
+            var tr; 
+            $(document).on("click", ".edit-btn", function () { 
+                // alert(444)
+                tr = $(this).parent().parent(); 
+                let tds = tr.children(); 
+                let id = tds.eq(1).html(); 
+                let name = tds.eq(2).html(); 
+                let gender = [tds.eq(3).html() == '男' ? 'M' : 'F']; 
+                let email = tds.eq(4).html(); 
+                let Dept = tds.eq(5).html(); 
+                switch (Dept) { 
+                    case '开发部': 
+                        Dept = "kf"; 
+                        break; 
+                    case '行政部': 
+                        Dept = "xz"; 
+                        break; 
+                    case '技术部': 
+                        Dept = "js"; 
+                        break; 
+                    case '市场部': 
+                        Dept = "sc"; 
+                        break; 
+                    case '测试部': 
+                        Dept = "cs"; 
+                        break; 
+                } 
+                $("#editModal form input[name=editId]").val(id); 
+                $("#editModal form input[name=editUserName]").val(name); 
+                $("#editModal form input[name=gender]").val(gender); 
+                $("#editModal form input[name=editEmail]").val(email); 
+                $("#editModal form select").val([Dept]); 
+                $("#editModal").modal({ 
+                    backdrop:'static' 
+                }); 
+            }) 
+            $(".edit-modal-save").click(function(){ 
+                var editusername = $("#editModal form input[name=editUserName]").val();  
+                var gender = $("#editModal form input[name=gender]:checked").val() == 'M' ? '男' : '女'; 
+                var email = $("#editModal form input[name=editEmail]").val(); 
+                var Dept = $("#editModal form select option:selected").val(); 
+                switch (Dept) { 
+                    case 'kf': 
+                        Dept = "开发部"; 
+                        break; 
+                    case 'xz': 
+                        Dept = "行政部"; 
+                        break; 
+                    case 'js': 
+                        Dept = "技术部"; 
+                        break; 
+                    case 'sc': 
+                        Dept = "市场部"; 
+                        break; 
+                    case 'cs': 
+                        Dept = "测试部"; 
+                        break; 
+                } 
+                var tds = tr.children(); 
+                tds.eq(2).html(editusername); 
+                tds.eq(3).html(gender); 
+                tds.eq(4).html(email); 
+                tds.eq(5).html(Dept); 
+                $("#editModal").modal('hide'); 
+                }) 
+        }) 
+    </script> 
+</head> 
+<body> 
+    <div class="add-modal modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"> 
+        <div class="modal-dialog" role="document"> 
+            <div class="modal-content"> 
+                <div class="modal-header"> 
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span 
+                            aria-hidden="true">&times;</span></button> 
+                    <h4 class="modal-title" IDid="myModalLabel">员工新增</h4> 
+                </div> 
+                <div class="modal-body"> 
+                    <form class="form-horizontal"> 
+                        <div class="form-group"> 
+                            <label for="edit-id" class="col-sm-2 control-label">ID:</label> 
+                            <div class="col-sm-10"> 
+                                <input type="text" name='editId' class="form-control" IDid="edit-id" readonly> 
+                            </div> 
+                        </div> 
+                        <div class="form-group"> 
+                            <label for="Name" class="col-sm-2 control-label">姓名:</label> 
+                            <div class="col-sm-10"> 
+                                <input type="email" name='editUserName' class="form-control" IDid="editinputusername" 
+                                    placeholder="请输入姓名"> 
+                            </div> 
+                        </div> 
+                        <div class="form-group"> 
+                            <label class="col-sm-2 control-label">性别:</label> 
+                            <div class="col-sm-10"> 
+                                <label class="radio-inline"> 
+                                    <input type="radio" name="gender" value="M"> 男 
+                                </label> 
+                                <label class="radio-inline"> 
+                                    <input type="radio" name="gender" value="F"> 女 
+                                </label> 
+                            </div> 
+                        </div>  
+                        <div class="form-group"> 
+                            <label for="uesremail" class="col-sm-2 control-label">邮箱:</label> 
+                            <div class="col-sm-10"> 
+                                <input type="email" class="form-control" name='editEmail' IDid="editinputemail" 
+                                    placeholder="请输入邮箱"> 
+                            </div> 
+                        </div> 
+                        <div class="form-group"> 
+                            <label for="Name" class="col-sm-2 control-label" name='Dept'>部门:</label> 
+                            <div class="col-sm-10"> 
+                                <select class="form-control"> 
+                                    <option value="ff">开发部</option> 
+                                    <option value="xz">行政部</option> 
+                                    <option value="js">技术部</option> 
+                                    <option value="sc">市场部</option> 
+                                    <option value="cs">测试部</option> 
+                                </select> 
+
+                            </div> 
+
+                        </div> 
+                    </form> 
+                </div> 
+                <div class="modal-footer"> 
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> 
+                    <button type="button" class="btn btn-primary edit-modal-save">保存</button> 
+                </div> 
+            </div> 
+        </div> 
+    </div> 
+    <div class="add-modal modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"> 
+        <div class="modal-dialog" role="document"> 
+            <div class="modal-content"> 
+                <div class="modal-header"> 
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span 
+                            aria-hidden="true">&times;</span></button> 
+                    <h4 class="modal-title" IDid="myModalLabel">员工新增</h4> 
+                </div> 
+                <div class="modal-body"> 
+                    <form class="form-horizontal"> 
+                        <div class="form-group"> 
+                            <label for="Name" class="col-sm-2 control-label">姓名:</label> 
+                            <div class="col-sm-10"> 
+                                <input type="email" name='addUserName' class="form-control" IDid="addinputusername" 
+                                    placeholder="请输入姓名"> 
+                            </div> 
+                        </div> 
+                        <div class="form-group"> 
+                            <label class="col-sm-2 control-label">性别:</label> 
+                            <div class="col-sm-10"> 
+                                <label class="radio-inline"> 
+                                    <input type="radio" name="gender" value="M"> 男 
+                                </label> 
+                                <label class="radio-inline"> 
+                                    <input type="radio" name="gender" value="F"> 女 
+                                </label> 
+                            </div> 
+                        </div> 
+                        <div class="form-group"> 
+                            <label for="uesremail" class="col-sm-2 control-label">邮箱:</label> 
+                            <div class="col-sm-10"> 
+                                <input type="email" class="form-control" name='addEmail' IDid="addinputemail" 
+                                    placeholder="请输入邮箱"> 
+                            </div> 
+                        </div> 
+                        <div class="form-group"> 
+                            <label for="Name" class="col-sm-2 control-label" name='Dept'>部门:</label> 
+                            <div class="col-sm-10"> 
+                                <select class="form-control"> 
+                                    <option value="kf">开发部</option> 
+                                    <option value="xz">行政部</option> 
+                                    <option value="js">技术部</option> 
+                                    <option value="sc">市场部</option> 
+                                    <option value="cs">测试部</option> 
+                                </select> 
+                            </div> 
+                        </div> 
+                    </form> 
+                </div> 
+                <div class="modal-footer"> 
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> 
+                    <button type="button" class="btn btn-primary add-modal-save">保存</button> 
+                </div> 
+            </div> 
+        </div> 
+    </div> 
+    <div class="container"> 
+        <div class="row"> 
+            <div class="col-md-12 col-lg-12"> 
+                <h1 class="tit">软工四班CRM系统</h1> 
+            </div> 
+        </div> 
+        <div class="row"> 
+            <div class="col-md-4 col-md-offset-8"> 
+                <button type="button" class="btn btn-primary add-btn ">新增</button> 
+                <button type="button" class="btn btn-danger">删除</button> 
+            </div> 
+        </div> 
+        <div class="row"> 
+            <div class="col-md-12"> 
+                <table class="table"> 
+                    <thead> 
+                        <tr> 
+                            <th> <input type="checkbox"> </th> 
+                            <th>ID</th> 
+                            <th>姓名</th> 
+                            <th>性别</th> 
+                            <th>邮箱</th> 
+                            <th>部门</th> 
+                        </tr> 
+                    </thead> 
+                    <tbody> 
+                        <tr> 
+                            <td> <input type="checkbox"> </td> 
+                            <td>2016</td> 
+                            <td>小王</td> 
+                            <td>男</td> 
+                            <td>@xiaowang</td> 
+                            <td>技术部</td> 
+                            <td> 
+                                <button type="button" class="btn btn-primary btn-sm edit-btn"> <span 
+                                        class="glyphicon glyphicon-pencil"></span> 修改</button> 
+                                <button type="button" class="btn btn-danger btn-sm del-btn"> <span 
+                                        class="glyphicon glyphicon-trash"></span> 删除</button> 
+                            </td> 
+                        </tr> 
+                        <tr> 
+                            <td> <input type="checkbox"> </td> 
+                            <td>2017</td> 
+                            <td>小杜</td> 
+                            <td>男</td> 
+                            <td>@xiaodu</td> 
+                            <td>市场部</td> 
+                            <td> 
+                                <button type="button" class="btn btn-primary btn-sm edit-btn"> <span 
+                                        class="glyphicon glyphicon-pencil"></span> 修改</button> 
+                                <button type="button" class="btn btn-danger btn-sm del-btn"> <span 
+                                        class="glyphicon glyphicon-trash"></span> 删除</button> 
+                            </td> 
+                        </tr> 
+                        <tr> 
+                            <td> <input type="checkbox"> </td> 
+                            <td>2018</td> 
+                            <td>小于</td> 
+                            <td>女</td> 
+                            <td>@xiaoyu</td> 
+                            <td>开发部</td> 
+                            <td> 
+                                <button type="button" class="btn btn-primary btn-sm edit-btn"> <span 
+                                        class="glyphicon glyphicon-pencil"></span> 修改</button> 
+                                <button type="button" class="btn btn-danger btn-sm del-btn"> <span 
+                                        class="glyphicon glyphicon-trash"></span> 删除</button> 
+                            </td> 
+                        </tr> 
+                        <tr> 
+                            <td> <input type="checkbox"> </td> 
+                            <td>2019</td> 
+                            <td>小张</td> 
+                            <td>女</td> 
+                            <td>@xiaozhang</td> 
+                            <td>行政部</td> 
+                            <td> 
+                                <button type="button" class="btn btn-primary btn-sm edit-btn"> <span 
+                                        class="glyphicon glyphicon-pencil"></span> 修改</button> 
+                                <button type="button" class="btn btn-danger btn-sm del-btn"> <span 
+                                        class="glyphicon glyphicon-trash"></span> 删除</button> 
+                            </td> 
+                        </tr> 
+                        <tr> 
+                            <td> <input type="checkbox"> </td> 
+                            <td>2020</td> 
+                            <td>小杨</td> 
+                            <td>女</td> 
+                            <td>@xiaoyang</td> 
+                            <td>测试部</td> 
+                            <td> 
+                                <button type="button" class="btn btn-primary btn-sm edit-btn"> <span 
+                                        class="glyphicon glyphicon-pencil"></span> 修改</button> 
+                                <button type="button" class="btn btn-danger btn-sm del-btn"> <span 
+                                        class="glyphicon glyphicon-trash"></span> 删除</button> 
+                            </td> 
+                        </tr> 
+                        <tr> 
+                            <td> <input type="checkbox"> </td> 
+                            <td>2021</td> 
+                            <td>小李</td> 
+                            <td>男</td> 
+                            <td>@xiaodong</td> 
+                            <td>市场部</td> 
+                            <td> 
+                                <button type="button" class="btn btn-primary btn-sm edit-btn"> <span 
+                                        class="glyphicon glyphicon-pencil"></span> 修改</button> 
+                                <button type="button" class="btn btn-danger btn-sm del-btn"> <span 
+                                        class="glyphicon glyphicon-trash"></span> 删除</button> 
+                            </td> 
+                        </tr> 
+                        <tr> 
+                            <td> <input type="checkbox"> </td> 
+                            <td>2022</td> 
+                            <td>小郭</td> 
+                            <td>女</td> 
+                            <td>@xiaoguo</td> 
+                            <td>行政部</td> 
+                            <td> 
+                                <button type="button" class="btn btn-primary btn-sm edit-btn"> <span 
+                                        class="glyphicon glyphicon-pencil"></span> 修改</button> 
+                                <button type="button" class="btn btn-danger btn-sm del-btn"> <span 
+                                        class="glyphicon glyphicon-trash"></span> 删除</button> 
+                            </td> 
+                        </tr> 
+                        <tr> 
+                            <td> <input type="checkbox"> </td> 
+                            <td>2023</td> 
+                            <td>小郝</td> 
+                            <td>女</td> 
+                            <td>@xiaohao</td> 
+                            <td>技术部</td> 
+                            <td> 
+                                <button type="button" class="btn btn-primary btn-sm edit-btn"> <span 
+                                        class="glyphicon glyphicon-pencil"></span> 修改</button> 
+                                <button type="button" class="btn btn-danger btn-sm del-btn"> <span 
+                                        class="glyphicon glyphicon-trash"></span> 删除</button> 
+                            </td> 
+                        </tr> 
+                    </tbody> 
+                </table> 
+            </div> 
+        </div> 
+        <div class="row"> 
+            <div class="col-md-6"> 
+                当前第1页，总共1000页，共8000条记录 
+            </div> 
+            <div class="col-md-6"> 
+                <nav aria-label="Page navigation"> 
+                    <ul class="pagination"> 
+                        <li class="active"><a href="#">首页</a></li> 
+                        <li class="disabled"> 
+                            <a href="#" aria-label="Previous"> 
+                                <span aria-hidden="true">&laquo;</span> 
+                            </a> 
+                        </li> 
+                        <li class="active"><a href="#">1</a></li> 
+                        <li><a href="#">2</a></li> 
+                        <li><a href="#">3</a></li> 
+                        <li><a href="#">4</a></li> 
+                        <li><a href="#">5</a></li> 
+                        <li> 
+                            <a href="#" aria-label="Next"> 
+                                <span aria-hidden="true">&raquo;</span> 
+                            </a> 
+                        </li> 
+                        <li class="active"><a href="#">尾页</a></li> 
+                    </ul> 
+                </nav> 
+            </div> 
+        </div> 
+    </div> 
+</body> 
+</html>
